@@ -9,11 +9,17 @@ import { Product } from "./product.entity";
 export class ProductsService {
   constructor(@InjectRepository(Product) private repo: Repository<Product>) {}
 
-  create(title: string, description: string, productModifiers: string[]) {
+  create(
+    title: string,
+    description: string,
+    productModifiers: string[],
+    price: number
+  ) {
     const productInstance = this.repo.create({
       description,
       productModifiers,
       title,
+      price,
     });
     return this.repo.save(productInstance);
   }

@@ -13,3 +13,23 @@ async function bootstrap() {
   await app.listen(8080);
 }
 bootstrap();
+
+/*
+GENERAL TASKS
+
+Setup nest ✓
+Database connection ✓
+Migrations
+Authorization
+Entities ✓
+Valdiation
+Swagger doc
+
+METHODS:
+Create user ✓
+Update user
+Add products to the order
+Accept order
+CRUD Products ✓
+
+*/

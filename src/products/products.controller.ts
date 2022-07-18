@@ -15,7 +15,8 @@ export class ProductsController {
     this.productService.create(
       body.title,
       body.description,
-      body.productModifiers
+      body.productModifiers,
+      body.price
     );
   }
 

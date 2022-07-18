@@ -5,12 +5,18 @@ import { Entity, Column, PrimaryGeneratedColumn, AfterInsert } from "typeorm";
 export class Product {
   @PrimaryGeneratedColumn()
   id: number;
+
   @Column()
   title: string;
+
   @Column()
   description: string;
+
   @Column("text", { array: true })
   productModifiers: string[];
+
+  @Column()
+  price: number;
 
   //logs
   @AfterInsert()
