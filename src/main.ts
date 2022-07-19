@@ -19,7 +19,7 @@ async function bootstrap() {
   const options = new DocumentBuilder()
     .setTitle("IncoraFirst API")
     .setDescription("API DOCUMENTATION")
-    .setVersion("1.0.0")
+    .setVersion("1.0.1")
     .build();
 
   const doc = SwaggerModule.createDocument(app, options);

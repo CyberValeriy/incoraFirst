@@ -1,20 +1,13 @@
 /* eslint-disable prettier/prettier */
-import {
-  Controller,
-  Post,
-  Patch,
-  Delete,
-  Param,
-  Body,
-  BadRequestException,
-} from "@nestjs/common";
+import { Controller, Post, Patch, Delete, Param, Body } from "@nestjs/common";
 import { ProductsService } from "./products.service";
 
 //instead of import duplicate add index.ts in dtos with exports;
 import { CreateProductDto } from "./dtos/create-product.dto";
 import { UpdateProductDto } from "./dtos/update-product.dto";
-import { ApiBody, ApiParam } from "@nestjs/swagger";
+import { ApiBody, ApiParam, ApiTags } from "@nestjs/swagger";
 
+@ApiTags("Products")
 @Controller("products")
 export class ProductsController {
   constructor(private productService: ProductsService) {}

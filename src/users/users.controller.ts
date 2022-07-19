@@ -6,8 +6,9 @@ import { SignInUserDto } from "./dtos/singin-user.dto";
 
 import { UsersService } from "./users.service";
 
-import { ApiBody, ApiResponse } from "@nestjs/swagger";
+import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
 
+@ApiTags("Users")
 @Controller("users")
 export class UsersController {
   constructor(private userService: UsersService) {}
@@ -24,6 +25,10 @@ export class UsersController {
   }
 
   @Post("/signin")
+  @ApiResponse({
+    status: 201,
+    description: "User authentication",
+  })
   async signin(@Body() body: SignInUserDto) {
     const token = await this.userService.signin(body.email, body.password);
     return { success: true, payload: { token } };
