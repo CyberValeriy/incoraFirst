@@ -4,18 +4,18 @@ import {
   Column,
   PrimaryGeneratedColumn,
   AfterInsert,
-  ManyToOne,
+  // ManyToOne,
 } from "typeorm";
 
-import { User } from "../users/users.entity";
+// import { User } from "../users/users.entity";
 
 @Entity()
 export class Order {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, { onDelete: "CASCADE" }) // reverse?
-  user: User;
+  // @ManyToOne(() => User, { onDelete: "CASCADE" }) // reverse?
+  // user: User;
 
   @Column()
   totalPrice: number;

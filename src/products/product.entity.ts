@@ -13,7 +13,7 @@ export class Product {
   description: string;
 
   @Column("text", { array: true })
-  productModifiers: string[];
+  productModifiers: string[]; //Many To Many
 
   @Column()
   price: number;

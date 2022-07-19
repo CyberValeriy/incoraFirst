@@ -1,16 +1,31 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Post, Get, Body } from "@nestjs/common";
+import { Controller, Post, Body } from "@nestjs/common";
 
-import { CreateUserDto } from "./dtos/create-user.dto";
+import { CreateUserDto } from "./dtos/create-user.dto"; //index.ts
+import { SignInUserDto } from "./dtos/singin-user.dto";
+
 import { UsersService } from "./users.service";
+
+import { ApiBody, ApiResponse } from "@nestjs/swagger";
 
 @Controller("users")
 export class UsersController {
   constructor(private userService: UsersService) {}
 
   @Post("/signup")
-  signup(@Body() body: CreateUserDto) {
-    this.userService.create(body.email, body.password);
-    return { success: true };
+  @ApiResponse({
+    status: 201,
+    description: "User authorization",
+  })
+  @ApiBody({ type: CreateUserDto })
+  async signup(@Body() body: CreateUserDto) {
+    const token = await this.userService.create(body.email, body.password);
+    return { success: true, payload: { token } };
+  }
+
+  @Post("/signin")
+  async signin(@Body() body: SignInUserDto) {
+    const token = await this.userService.signin(body.email, body.password);
+    return { success: true, payload: { token } };
   }
 }

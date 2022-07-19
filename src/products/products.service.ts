@@ -34,6 +34,7 @@ export class ProductsService {
   }
 
   async update(id: number, attrs: Partial<Product>) {
+    //create custom repo for findOne method
     const product = await this.repo.findOne({ where: { id } });
     //add custom err from Nest
     if (!product) {

@@ -4,13 +4,13 @@ import {
   Column,
   PrimaryGeneratedColumn,
   AfterInsert,
-  OneToMany,
+  // OneToMany,
 } from "typeorm";
 
 // import { Product } from "../products/product.entity";
 
 @Entity()
-export class User {
+export class Users {
   @PrimaryGeneratedColumn()
   id: number;
   @Column({ unique: true })
@@ -18,7 +18,7 @@ export class User {
   @Column()
   password: string;
 
-  //   @OneToMany(() => Product) //inverse?
+  // @OneToMany(() => Product) //inverse?
   //   cart: Product[];
 
   //logs

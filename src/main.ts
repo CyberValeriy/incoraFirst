@@ -1,7 +1,12 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable prettier/prettier */
+
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import { ValidationPipe } from "@nestjs/common";
+import { PORT } from "./config";
+
+import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -10,26 +15,16 @@ async function bootstrap() {
       whitelist: true,
     })
   );
-  await app.listen(8080);
+
+  const options = new DocumentBuilder()
+    .setTitle("IncoraFirst API")
+    .setDescription("API DOCUMENTATION")
+    .setVersion("1.0.0")
+    .build();
+
+  const doc = SwaggerModule.createDocument(app, options);
+  SwaggerModule.setup("api", app, doc);
+
+  await app.listen(PORT);
 }
 bootstrap();
-
-/*
-GENERAL TASKS
-
-Setup nest ✓
-Database connection ✓
-Migrations
-Authorization
-Entities ✓
-Valdiation
-Swagger doc
-
-METHODS:
-Create user ✓
-Update user
-Add products to the order
-Accept order
-CRUD Products ✓
-
-*/
