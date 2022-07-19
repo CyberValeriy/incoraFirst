@@ -4,24 +4,28 @@ import {
   Column,
   PrimaryGeneratedColumn,
   AfterInsert,
-  // ManyToOne,
+  ManyToMany,
+  JoinTable,
+  ManyToOne,
 } from "typeorm";
 
-// import { User } from "../users/users.entity";
+import { Users } from "../users/users.entity";
+import { Product } from "../products/product.entity";
 
 @Entity()
 export class Order {
   @PrimaryGeneratedColumn()
   id: number;
 
-  // @ManyToOne(() => User, { onDelete: "CASCADE" }) // reverse?
-  // user: User;
-
   @Column()
   totalPrice: number;
 
-  //   @Column("number", { array: true }) must be a key ?
-  //   products: number[];
+  @ManyToMany(() => Product)
+  @JoinTable()
+  products: Product[];
+
+  @ManyToOne(() => Users, (user) => user.orders)
+  user: Users;
 
   //logs
   @AfterInsert()

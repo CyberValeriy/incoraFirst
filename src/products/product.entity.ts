@@ -1,12 +1,5 @@
 /* eslint-disable prettier/prettier */
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  AfterInsert,
-  ManyToMany,
-  JoinTable,
-} from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, AfterInsert } from "typeorm";
 
 @Entity()
 export class Product {
@@ -19,7 +12,6 @@ export class Product {
   @Column()
   description: string;
 
-  @Column("text", { array: true })
   // @ManyToMany(() => ProductModifier)
   // @JoinTable()
   productModifiers: string[]; //Many To Many

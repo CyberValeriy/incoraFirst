@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Post, Body } from "@nestjs/common";
+import { Controller, Post, Body, Param } from "@nestjs/common";
 
 import { CreateUserDto } from "./dtos/create-user.dto"; //index.ts
 import { SignInUserDto } from "./dtos/singin-user.dto";
@@ -33,4 +33,14 @@ export class UsersController {
     const token = await this.userService.signin(body.email, body.password);
     return { success: true, payload: { token } };
   }
+
+  @Post("/addToCart/:id") //or Put?
+  //add token check
+  async addToCart(@Param("id") id: string) {
+    await this.userService.addToCart(parseInt(id), 7);
+  }
+
+  // @Post("/checkout") //or Put?
+  //add token check
+  // async checkout() {}
 }

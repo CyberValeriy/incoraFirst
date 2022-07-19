@@ -4,10 +4,10 @@ import {
   Column,
   PrimaryGeneratedColumn,
   AfterInsert,
-  // OneToMany,
+  OneToMany,
 } from "typeorm";
 
-// import { Product } from "../products/product.entity";
+import { Order } from "../orders/order.entity";
 
 @Entity()
 export class Users {
@@ -18,8 +18,11 @@ export class Users {
   @Column()
   password: string;
 
-  // @OneToMany(() => Product) //inverse?
-  //   cart: Product[];
+  @Column("int", { array: true, default: [] }) //no need a relation?
+  products: number[];
+
+  @OneToMany(() => Order, (order) => order.user)
+  orders: Order[];
 
   //logs
   @AfterInsert()
