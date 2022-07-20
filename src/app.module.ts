@@ -7,11 +7,11 @@ import { UsersModule } from "./users/users.module";
 import { ProductsModule } from "./products/products.module";
 import { OrdersModule } from "./orders/orders.module";
 
-import typeOrmModule from "./config/databaseModule";
+import typeOrmModule from "./db/db.module";
 
 @Module({
-  imports: [typeOrmModule, UsersModule, ProductsModule, OrdersModule],
   controllers: [AppController],
   providers: [AppService],
+  imports: [typeOrmModule, UsersModule, ProductsModule, OrdersModule],
 })
 export class AppModule {}

@@ -4,7 +4,7 @@
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import { ValidationPipe } from "@nestjs/common";
-import { PORT } from "./config";
+import { PORT } from "./config/application.config";
 
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 
@@ -16,6 +16,7 @@ async function bootstrap() {
     })
   );
 
+  app.setGlobalPrefix("/api");
   const options = new DocumentBuilder()
     .setTitle("IncoraFirst API")
     .setDescription("API DOCUMENTATION")
@@ -23,7 +24,7 @@ async function bootstrap() {
     .build();
 
   const doc = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup("api", app, doc);
+  SwaggerModule.setup("api-doc", app, doc);
 
   await app.listen(PORT);
 }

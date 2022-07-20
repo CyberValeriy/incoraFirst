@@ -37,7 +37,7 @@ export class UsersController {
   @Post("/addToCart/:id") //or Put?
   //add token check
   async addToCart(@Param("id") id: string) {
-    await this.userService.addToCart(parseInt(id), 7);
+    await this.userService.addToCart(parseInt(id), "validoks@gmail.com");
   }
 
   // @Post("/checkout") //or Put?
