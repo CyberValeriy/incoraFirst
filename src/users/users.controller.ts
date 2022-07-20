@@ -34,7 +34,13 @@ export class UsersController {
     return { success: true, payload: { token } };
   }
 
-  // @Post("/checkout") //or Put?
-  //add token check
-  // async checkout() {}
+  @Post("/checkout")
+  // add token check
+  async checkout(@Body() products) {
+    //add dto
+    //add timestamps
+    const user = {}; //get from guard
+    const order = await this.userService.checkout(user, products);
+    return { success: true, payload: { orderId: order.id } };
+  }
 }

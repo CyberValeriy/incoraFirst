@@ -20,6 +20,9 @@ export class Product {
   @Column()
   description: string;
 
+  @Column()
+  price: number;
+
   // @ManyToMany(() => ProductModifier)
   // @JoinTable()
   // productModifiers: string[]; //Many To Many

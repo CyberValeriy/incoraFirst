@@ -26,7 +26,7 @@ export class ProductsController {
     this.productService.create(
       body.title,
       body.description,
-      body.productModifiers,
+      // body.productModifiers,
       body.price
     );
   }
@@ -42,10 +42,5 @@ export class ProductsController {
   @ApiBody({ type: UpdateProductDto })
   updateProduct(@Param("id") id: string, @Body() body: UpdateProductDto) {
     this.productService.update(parseInt(id), body);
-  }
-
-  @Get("/ss")
-  test() {
-    this.productService.findMany([3, 3]);
   }
 }

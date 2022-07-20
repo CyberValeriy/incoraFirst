@@ -9,7 +9,7 @@ import { Repository } from "typeorm";
 
 import { Users } from "./users.entity";
 
-import { ProductsService } from "../products/products.service";
+import { OrdersService } from "../orders/orders.service";
 
 import { generateToken } from "../utils/jwt.util";
 import bcrypt from "bcrypt";
@@ -18,7 +18,7 @@ import bcrypt from "bcrypt";
 export class UsersService {
   constructor(
     @InjectRepository(Users) private usersRepo: Repository<Users>,
-    private productService: ProductsService
+    private ordersService: OrdersService
   ) {}
 
   async create(email: string, password: string) {
@@ -46,7 +46,10 @@ export class UsersService {
     return token;
   }
 
-  async checkout(id: number) {
-    // const products
+  async checkout(user, products) {
+    //user from midleware/guard
+    const order = await this.ordersService.create(user);
+    await this.ordersService.createItems(order, products);
+    return order;
   }
 }

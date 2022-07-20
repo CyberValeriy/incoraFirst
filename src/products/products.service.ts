@@ -12,12 +12,12 @@ export class ProductsService {
   create(
     title: string,
     description: string,
-    productModifiers: string[],
+    // productModifiers: string[],
     price: number
-  ) {
+  ): Promise<Product> {
     const productInstance = this.repo.create({
       description,
-      productModifiers,
+      // productModifiers,
       title,
       price,
     });
@@ -30,23 +30,22 @@ export class ProductsService {
     return this.repo.remove(product);
   }
 
-  async update(id: number, attrs: Partial<Product>) {
+  async update(id: number, attrs: Partial<Product>): Promise<Product> {
     const product = await this.repo.findOne({ where: { id } });
     this.isProductExists(product);
     Object.assign(product, attrs);
     return this.repo.save(product);
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<Product> {
     const product = await this.repo.findOne({ where: { id } });
     this.isProductExists(product);
     return product;
   }
 
-  async findMany(ids: number[]) {
+  async findMany(ids: number[]): Promise<Product[]> {
     const products = await this.repo.find({ where: { id: In(ids) } });
-
-    console.log(products);
+    return products;
   }
 
   isProductExists(product: Product) {
