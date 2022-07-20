@@ -1,12 +1,10 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Post, Body, Param } from "@nestjs/common";
-
-import { CreateUserDto } from "./dtos/create-user.dto"; //index.ts
-import { SignInUserDto } from "./dtos/singin-user.dto";
-
-import { UsersService } from "./users.service";
-
+import { Controller, Post, Body } from "@nestjs/common";
 import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
+
+import { CheckoutDto, CreateUserDto, SignInUserDto } from "./dtos";
+import { UsersService } from "./users.service";
+import { Users } from "./users.entity";
 
 @ApiTags("Users")
 @Controller("users")
@@ -35,12 +33,12 @@ export class UsersController {
   }
 
   @Post("/checkout")
+  @ApiResponse({ status: 201, description: "Create order with products" })
   // add token check
-  async checkout(@Body() products) {
-    //add dto
+  async checkout(@Body() payload: CheckoutDto) {
     //add timestamps
-    const user = {}; //get from guard
-    const order = await this.userService.checkout(user, products);
+    const user: Users = {}; //for test
+    const order = await this.userService.checkout(user, payload.products);
     return { success: true, payload: { orderId: order.id } };
   }
 }

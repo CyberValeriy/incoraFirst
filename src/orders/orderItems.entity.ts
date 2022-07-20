@@ -4,13 +4,11 @@ import {
   Column,
   PrimaryGeneratedColumn,
   AfterInsert,
-  ManyToMany,
-  JoinTable,
   ManyToOne,
 } from "typeorm";
 
 import { Product } from "../products/product.entity";
-import { Order } from "../orders/order.entity";
+import { Orders } from "../orders/order.entity";
 
 @Entity()
 export class OrderItem {
@@ -18,13 +16,10 @@ export class OrderItem {
   id: number;
 
   @Column()
-  price: number;
-
-  @Column()
   quantity: number;
 
-  @ManyToOne(() => Order)
-  order: Order;
+  @ManyToOne(() => Orders)
+  order: Orders;
 
   @ManyToOne(() => Product)
   product: Product;

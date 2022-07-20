@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 import {
   Entity,
-  Column,
   PrimaryGeneratedColumn,
   AfterInsert,
   OneToMany,
@@ -12,7 +11,7 @@ import { Users } from "../users/users.entity";
 import { OrderItem } from "../orders/orderItems.entity";
 
 @Entity()
-export class Order {
+export class Orders {
   @PrimaryGeneratedColumn()
   id: number;
 

@@ -4,7 +4,7 @@
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import { ValidationPipe } from "@nestjs/common";
-import { PORT } from "./config/application.config";
+import { PORT, DB } from "./config/application.config";
 
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 
@@ -26,6 +26,9 @@ async function bootstrap() {
   const doc = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup("api-doc", app, doc);
 
-  await app.listen(PORT);
+  await app.listen(PORT, () => {
+    console.log("Server launched!"); //separate func
+    console.log("Database:", DB.name);
+  });
 }
 bootstrap();

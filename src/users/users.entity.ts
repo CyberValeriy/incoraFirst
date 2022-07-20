@@ -7,7 +7,7 @@ import {
   OneToMany,
 } from "typeorm";
 
-import { Order } from "../orders/order.entity";
+import { Orders } from "../orders/order.entity";
 
 @Entity()
 export class Users {
@@ -18,8 +18,8 @@ export class Users {
   @Column()
   password: string;
 
-  @OneToMany(() => Order, (order) => order.user)
-  orders: Order[];
+  @OneToMany(() => Orders, (order) => order.user)
+  orders: Orders[];
 
   //logs
   @AfterInsert()

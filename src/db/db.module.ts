@@ -5,7 +5,8 @@ import { DB } from "../config/application.config";
 
 import { Users } from "../users/users.entity";
 import { Product } from "../products/product.entity";
-import { Order } from "../orders/order.entity";
+import { Orders } from "../orders/order.entity";
+import { OrderItem } from "../orders/orderItems.entity";
 
 import { postgresT } from "../types/databaseTypes";
 
@@ -16,7 +17,7 @@ const CONFIG: TypeOrmModuleOptions = {
   port: parseInt(DB.port),
   username: DB.username,
   password: DB.password,
-  entities: [Users, Product, Order],
+  entities: [Users, Product, Orders, OrderItem],
   synchronize: true,
 };
 

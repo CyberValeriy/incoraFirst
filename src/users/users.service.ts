@@ -12,6 +12,8 @@ import { Users } from "./users.entity";
 import { OrdersService } from "../orders/orders.service";
 
 import { generateToken } from "../utils/jwt.util";
+
+import { ICheckoutProducts } from "../interfaces/users.interfaces";
 import bcrypt from "bcrypt";
 
 @Injectable()
@@ -46,9 +48,10 @@ export class UsersService {
     return token;
   }
 
-  async checkout(user, products) {
+  async checkout(user: Users, products: ICheckoutProducts[]) {
     //user from midleware/guard
-    const order = await this.ordersService.create(user);
+    const user1 = await this.usersRepo.findOne({ where: { id: 1 } });
+    const order = await this.ordersService.create(user1);
     await this.ordersService.createItems(order, products);
     return order;
   }

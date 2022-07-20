@@ -28,7 +28,6 @@ export class Product {
   // productModifiers: string[]; //Many To Many
 
   @OneToMany(() => OrderItem, (orderItem) => orderItem.product)
-  @Column()
   orderItems: OrderItem[];
 
   //logs
