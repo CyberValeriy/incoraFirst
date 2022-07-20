@@ -1,5 +1,13 @@
 /* eslint-disable prettier/prettier */
-import { Entity, Column, PrimaryGeneratedColumn, AfterInsert } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  AfterInsert,
+  OneToMany,
+} from "typeorm";
+
+import { OrderItem } from "../orders/orderItems.entity";
 
 @Entity()
 export class Product {
@@ -14,10 +22,11 @@ export class Product {
 
   // @ManyToMany(() => ProductModifier)
   // @JoinTable()
-  productModifiers: string[]; //Many To Many
+  // productModifiers: string[]; //Many To Many
 
+  @OneToMany(() => OrderItem, (orderItem) => orderItem.product)
   @Column()
-  price: number;
+  orderItems: OrderItem[];
 
   //logs
   @AfterInsert()

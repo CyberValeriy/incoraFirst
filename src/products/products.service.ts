@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 
-import { Repository } from "typeorm";
+import { In, Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Product } from "./product.entity";
 
@@ -26,32 +26,38 @@ export class ProductsService {
 
   async remove(id: number) {
     const product = await this.repo.findOne({ where: { id } });
-    //add custom err from Nest
-    if (!product) {
-      throw new Error("Product not found!");
-    }
+    this.isProductExists(product);
     return this.repo.remove(product);
   }
 
   async update(id: number, attrs: Partial<Product>) {
-    //create custom repo for findOne method
     const product = await this.repo.findOne({ where: { id } });
-    //add custom err from Nest
-    if (!product) {
-      throw new Error("Product not found!");
-    }
+    this.isProductExists(product);
     Object.assign(product, attrs);
     return this.repo.save(product);
   }
+
+  async findOne(id: number) {
+    const product = await this.repo.findOne({ where: { id } });
+    this.isProductExists(product);
+    return product;
+  }
+
+  async findMany(ids: number[]) {
+    const products = await this.repo.find({ where: { id: In(ids) } });
+
+    console.log(products);
+  }
+
+  isProductExists(product: Product) {
+    if (!product) {
+      throw new BadRequestException("Product not found!");
+    }
+  }
+
+  // isProductExists(products: Product[]) {
+  //   if (!products) {
+  //     throw new BadRequestException("Product not found!");
+  //   }
+  // }
 }
-
-/*
-TASKS:
-Add Create✓
-Add Remove✓
-Add Update✓
-Add Get
-
-Remove user check, setup interceptors
-Create single method for findOne instead of code duplication
-*/

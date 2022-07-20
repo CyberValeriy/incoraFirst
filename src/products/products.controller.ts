@@ -1,5 +1,13 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Post, Patch, Delete, Param, Body } from "@nestjs/common";
+import {
+  Controller,
+  Post,
+  Patch,
+  Delete,
+  Param,
+  Body,
+  Get,
+} from "@nestjs/common";
 import { ProductsService } from "./products.service";
 
 //instead of import duplicate add index.ts in dtos with exports;
@@ -34,5 +42,10 @@ export class ProductsController {
   @ApiBody({ type: UpdateProductDto })
   updateProduct(@Param("id") id: string, @Body() body: UpdateProductDto) {
     this.productService.update(parseInt(id), body);
+  }
+
+  @Get("/ss")
+  test() {
+    this.productService.findMany([3, 3]);
   }
 }

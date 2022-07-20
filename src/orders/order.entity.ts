@@ -4,13 +4,12 @@ import {
   Column,
   PrimaryGeneratedColumn,
   AfterInsert,
-  ManyToMany,
-  JoinTable,
+  OneToMany,
   ManyToOne,
 } from "typeorm";
 
 import { Users } from "../users/users.entity";
-import { Product } from "../products/product.entity";
+import { OrderItem } from "../orders/orderItems.entity";
 
 @Entity()
 export class Order {
@@ -20,11 +19,10 @@ export class Order {
   @Column()
   totalPrice: number;
 
-  @ManyToMany(() => Product)
-  @JoinTable()
-  products: Product[];
+  @OneToMany(() => OrderItem, (orderItem) => orderItem.order)
+  orderItems: OrderItem[];
 
-  @ManyToOne(() => Users, (user) => user.orders)
+  @ManyToOne(() => Users)
   user: Users;
 
   //logs

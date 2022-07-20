@@ -18,9 +18,6 @@ export class Users {
   @Column()
   password: string;
 
-  @Column("int", { array: true, default: [] }) //no need a relation?
-  products: number[];
-
   @OneToMany(() => Order, (order) => order.user)
   orders: Order[];
 

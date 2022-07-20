@@ -8,17 +8,17 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
 import { Users } from "./users.entity";
-import { Product } from "../products/product.entity";
+
+import { ProductsService } from "../products/products.service";
 
 import { generateToken } from "../utils/jwt.util";
-
 import bcrypt from "bcrypt";
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(Users) private usersRepo: Repository<Users>,
-    @InjectRepository(Product) private productRepo: Repository<Product>
+    private productService: ProductsService
   ) {}
 
   async create(email: string, password: string) {
@@ -46,12 +46,7 @@ export class UsersService {
     return token;
   }
 
-  async addToCart(id: number, email: string) {
-    const product = await this.productRepo.findOne({ where: { id } }); //how to do a relation check
-    if (!product) {
-    }
-    const user = await this.usersRepo.findOne({ where: { email } });
-    user.products.push(product.id);
-    return this.usersRepo.save(user);
+  async checkout(id: number) {
+    // const products
   }
 }

@@ -34,12 +34,6 @@ export class UsersController {
     return { success: true, payload: { token } };
   }
 
-  @Post("/addToCart/:id") //or Put?
-  //add token check
-  async addToCart(@Param("id") id: string) {
-    await this.userService.addToCart(parseInt(id), "validoks@gmail.com");
-  }
-
   // @Post("/checkout") //or Put?
   //add token check
   // async checkout() {}
