@@ -1,5 +1,13 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Post, Patch, Delete, Param, Body } from "@nestjs/common";
+import {
+  Controller,
+  Post,
+  Patch,
+  Delete,
+  Param,
+  Body,
+  UseGuards,
+} from "@nestjs/common";
 import { ProductsService } from "./products.service";
 
 //instead of import duplicate add index.ts in dtos with exports;
@@ -7,6 +15,9 @@ import { CreateProductDto } from "./dtos/create-product.dto";
 import { UpdateProductDto } from "./dtos/update-product.dto";
 import { ApiBody, ApiParam, ApiTags } from "@nestjs/swagger";
 
+import { AuthGuard } from "../guards/auth.guard";
+
+@UseGuards(AuthGuard)
 @ApiTags("Products")
 @Controller("products")
 export class ProductsController {
@@ -14,8 +25,8 @@ export class ProductsController {
 
   @Post("/create")
   @ApiBody({ type: CreateProductDto })
-  createProduct(@Body() body: CreateProductDto) {
-    this.productService.create(
+  async createProduct(@Body() body: CreateProductDto) {
+    await this.productService.create(
       body.title,
       body.description,
       // body.productModifiers,
@@ -26,14 +37,16 @@ export class ProductsController {
 
   @Delete("/:id")
   @ApiParam({ name: "id", required: true })
-  removeProduct(@Param("id") id: string) {
-    this.productService.remove(parseInt(id));
+  async removeProduct(@Param("id") id: string) {
+    await this.productService.remove(parseInt(id));
+    return { success: true };
   }
 
   @Patch("/:id")
   @ApiParam({ name: "id", required: true })
   @ApiBody({ type: UpdateProductDto })
-  updateProduct(@Param("id") id: string, @Body() body: UpdateProductDto) {
-    this.productService.update(parseInt(id), body);
+  async updateProduct(@Param("id") id: string, @Body() body: UpdateProductDto) {
+    await this.productService.update(parseInt(id), body);
+    return { success: true };
   }
 }
