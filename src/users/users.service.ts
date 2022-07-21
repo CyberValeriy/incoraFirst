@@ -52,9 +52,7 @@ export class UsersService {
 
   async checkout(user: Users, products: ICheckoutProducts[]) {
     try {
-      //user from midleware/guard
-      const user1 = await this.usersRepo.findOne({ where: { id: 1 } });
-      const order = await this.ordersService.create(user1);
+      const order = await this.ordersService.create(user);
       await this.ordersService.createItems(order, products);
       return order;
     } catch ({ message }) {
@@ -62,18 +60,29 @@ export class UsersService {
     }
   }
 
-  async testFunc() {
-    const users = await this.usersRepo.findOne({
-      where: { id: 1 },
-      relations: ["orders"],
-    });
-    const order = users.orders[0];
-    console.log(order);
-    //just get array of user alergen ids and exlude?
-    const test = await this.usersRepo.findOne({
-      where: { id: 1, orders: { id: Not(1) } },
-      relations: ["orders"],
-    });
-    console.log(test);
+  async findOne(email: string) {
+    const user = await this.usersRepo.findOne({ where: { email } });
+    this.isUserExists(user);
+    return user;
   }
+
+  isUserExists(user: Users) {
+    if (!user) {
+      throw new BadRequestException("User not found!");
+    }
+  }
+  // async testFunc() {
+  //   const users = await this.usersRepo.findOne({
+  //     where: { id: 1 },
+  //     relations: ["orders"],
+  //   });
+  //   const order = users.orders[0];
+  //   console.log(order);
+  //   //just get array of user alergen ids and exlude?
+  //   const test = await this.usersRepo.findOne({
+  //     where: { id: 1, orders: { id: Not(1) } },
+  //     relations: ["orders"],
+  //   });
+  //   console.log(test);
+  // }
 }

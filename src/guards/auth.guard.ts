@@ -26,6 +26,8 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException("Authorization header missing!");
     }
     const payload = authHeaderCheck(authorization);
+    req.userEmail = payload.email;
+    //how to make service to exec in guard
     return true;
   }
 }
