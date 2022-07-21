@@ -16,6 +16,8 @@ import { generateToken } from "../utils/jwt.util";
 import { ICheckoutProducts } from "../interfaces/users.interfaces";
 import bcrypt from "bcrypt";
 
+/*How to not block errors with try? */
+
 @Injectable()
 export class UsersService {
   constructor(
@@ -49,11 +51,15 @@ export class UsersService {
   }
 
   async checkout(user: Users, products: ICheckoutProducts[]) {
-    //user from midleware/guard
-    const user1 = await this.usersRepo.findOne({ where: { id: 1 } });
-    const order = await this.ordersService.create(user1);
-    await this.ordersService.createItems(order, products);
-    return order;
+    try {
+      //user from midleware/guard
+      const user1 = await this.usersRepo.findOne({ where: { id: 1 } });
+      const order = await this.ordersService.create(user1);
+      await this.ordersService.createItems(order, products);
+      return order;
+    } catch ({ message }) {
+      throw new BadRequestException(message);
+    }
   }
 
   async testFunc() {

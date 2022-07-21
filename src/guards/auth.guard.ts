@@ -4,6 +4,7 @@ import {
   CanActivate,
   ExecutionContext,
   UnauthorizedException,
+  BadRequestException,
 } from "@nestjs/common";
 import { Observable } from "rxjs";
 

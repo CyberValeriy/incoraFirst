@@ -20,27 +20,31 @@ export class OrdersService {
   ) {}
 
   async create(user: Users): Promise<Orders> {
-    const order = this.orderRepo.create({
-      user,
-    });
-    return this.orderRepo.save(order);
+    try {
+      const order = this.orderRepo.create({
+        user,
+      });
+      return this.orderRepo.save(order);
+    } catch ({ message }) {
+      throw new BadRequestException(message);
+    }
   }
 
   async createItems(order: Orders, products): Promise<void> {
+    //bullshit?
+    const productIds = [];
+
+    for (const el of products) {
+      productIds.push(el.id);
+    }
+    const productInstances: Product[] = await this.productService.findMany(
+      productIds
+    );
+
+    if (productInstances.length !== products.length) {
+      throw new BadRequestException("Invalid product id!");
+    }
     try {
-      //bullshit?
-      const productIds = [];
-
-      for (const el of products) {
-        productIds.push(el.id);
-      }
-      const productInstances: Product[] = await this.productService.findMany(
-        productIds
-      );
-
-      if (productInstances.length !== products.length) {
-        throw new BadRequestException("Invalid product id!");
-      }
       const orderItemsInstances = [];
       for (let i = 0; i < productInstances.length; i++) {
         //or create array instead and after insert many?

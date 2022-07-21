@@ -24,11 +24,19 @@ export class ModifiersService {
     const modifier = await this.modifierRepo.findOne({ where: { id } });
     this.isModifierExists(modifier);
 
-    return this.modifierRepo.remove(modifier);
+    try {
+      return this.modifierRepo.remove(modifier);
+    } catch ({ message }) {
+      throw new BadRequestException(message);
+    }
   }
 
   fetch(skip: number, limit: number) {
-    return this.modifierRepo.find({ skip, take: limit });
+    try {
+      return this.modifierRepo.find({ skip, take: limit });
+    } catch ({ message }) {
+      throw new BadRequestException(message);
+    }
   }
 
   isModifierExists(modifier: Modifier) {

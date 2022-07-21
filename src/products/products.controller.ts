@@ -13,7 +13,7 @@ import { ProductsService } from "./products.service";
 //instead of import duplicate add index.ts in dtos with exports;
 import { CreateProductDto } from "./dtos/create-product.dto";
 import { UpdateProductDto } from "./dtos/update-product.dto";
-import { ApiBody, ApiParam, ApiTags } from "@nestjs/swagger";
+import { ApiBody, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
 
 import { AuthGuard } from "../guards/auth.guard";
 
@@ -25,6 +25,7 @@ export class ProductsController {
 
   @Post("/create")
   @ApiBody({ type: CreateProductDto })
+  @ApiResponse({ description: "Create product!" })
   async createProduct(@Body() body: CreateProductDto) {
     await this.productService.create(
       body.title,
