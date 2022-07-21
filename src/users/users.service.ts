@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { In, Not, Repository } from "typeorm";
 
 import { Users } from "./users.entity";
 
@@ -54,5 +54,20 @@ export class UsersService {
     const order = await this.ordersService.create(user1);
     await this.ordersService.createItems(order, products);
     return order;
+  }
+
+  async testFunc() {
+    const users = await this.usersRepo.findOne({
+      where: { id: 1 },
+      relations: ["orders"],
+    });
+    const order = users.orders[0];
+    console.log(order);
+    //just get array of user alergen ids and exlude?
+    const test = await this.usersRepo.findOne({
+      where: { id: 1, orders: { id: Not(1) } },
+      relations: ["orders"],
+    });
+    console.log(test);
   }
 }

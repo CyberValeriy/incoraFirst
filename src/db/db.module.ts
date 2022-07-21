@@ -3,11 +3,6 @@
 import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
 import { DB } from "../config/application.config";
 
-import { Users } from "../users/users.entity";
-import { Product } from "../products/product.entity";
-import { Orders } from "../orders/order.entity";
-import { OrderItem } from "../orders/orderItems.entity";
-
 import { postgresT } from "../types/databaseTypes";
 
 const CONFIG: TypeOrmModuleOptions = {
@@ -17,7 +12,7 @@ const CONFIG: TypeOrmModuleOptions = {
   port: parseInt(DB.port),
   username: DB.username,
   password: DB.password,
-  entities: [Users, Product, Orders, OrderItem],
+  entities: ["dist/**/*.entity.js"],
   synchronize: true,
 };
 

@@ -18,8 +18,14 @@ export class OrderItem {
   @Column()
   quantity: number;
 
+  @Column()
+  orderId: number;
+
   @ManyToOne(() => Orders)
   order: Orders;
+
+  @Column()
+  productId: number;
 
   @ManyToOne(() => Product)
   product: Product;

@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Post, Body } from "@nestjs/common";
+import { Controller, Post, Body, Get } from "@nestjs/common";
 import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
 
 import { CheckoutDto, CreateUserDto, SignInUserDto } from "./dtos";
@@ -32,13 +32,18 @@ export class UsersController {
     return { success: true, payload: { token } };
   }
 
-  @Post("/checkout")
-  @ApiResponse({ status: 201, description: "Create order with products" })
+  // @Post("/checkout")
+  // @ApiResponse({ status: 201, description: "Create order with products" })
   // add token check
-  async checkout(@Body() payload: CheckoutDto) {
-    //add timestamps
-    const user: Users = {}; //for test
-    const order = await this.userService.checkout(user, payload.products);
-    return { success: true, payload: { orderId: order.id } };
+  // async checkout(@Body() payload: CheckoutDto) {
+  //   //add timestamps
+  //   const user: Users = {}; //for test
+  //   const order = await this.userService.checkout(user, payload.products);
+  //   return { success: true, payload: { orderId: order.id } };
+  // }
+
+  @Get("/test")
+  async testFunc() {
+    this.userService.testFunc();
   }
 }

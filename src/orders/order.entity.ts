@@ -5,6 +5,7 @@ import {
   AfterInsert,
   OneToMany,
   ManyToOne,
+  Column,
 } from "typeorm";
 
 import { Users } from "../users/users.entity";
@@ -15,8 +16,13 @@ export class Orders {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToMany(() => OrderItem, (orderItem) => orderItem.order)
+  @OneToMany(() => OrderItem, (orderItem) => orderItem.order, {
+    onDelete: "CASCADE",
+  })
   orderItems: OrderItem[];
+
+  @Column()
+  userId: number;
 
   @ManyToOne(() => Users)
   user: Users;
