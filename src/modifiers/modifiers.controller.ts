@@ -12,6 +12,7 @@ import {
 import {CreateModifierDto,FetchModifierDto} from "./dtos";
 import { ModifiersService } from "./modifiers.service";
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiParam,
   ApiQuery,
@@ -21,8 +22,9 @@ import {
 
 import { AuthGuard } from "../guards/auth.guard";
 
+// @ApiBearerAuth()
 @ApiTags("Modifiers")
-@UseGuards(AuthGuard)
+// @UseGuards(AuthGuard)
 @Controller("modifiers")
 export class ModifiersController {
   constructor(private modifierService: ModifiersService) {}
@@ -51,10 +53,10 @@ export class ModifiersController {
   @ApiQuery({ name: "limit" })
   @ApiQuery({ name: "skip" })
   @ApiResponse({ description: "Get modifiers with pagination" })
-  async fetch(@Query()pagination:FetchModifierDto) {
+  async fetch(@Query() query:FetchModifierDto) {
     const modifiers = await this.modifierService.fetch(
-      parseInt(pagination.skip),
-      parseInt(pagination.limit)
+      parseInt(query.skip),
+      parseInt(query.limit)
     );
     return { success: true, data: { modifiers } };
   }

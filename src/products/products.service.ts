@@ -2,7 +2,7 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import {ModifiersService} from "../modifiers/modifiers.service";
 
-import { In, Repository } from "typeorm";
+import { In,  Not, Repository} from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Product } from "./product.entity";
 
@@ -77,6 +77,14 @@ export class ProductsService {
     const product = await this.productRepo.findOne({where:{id:productId},relations:["productModifiers"]});
     product.productModifiers.push(modifier);
     return this.productRepo.save(product);
+  }
+
+  async getProducts(alergens:number[]){
+    const products = await this.productRepo.find({
+      where:{productModifiers:{id:Not(In(alergens))}}, //how to fix products that don't have relations?
+      relations:["productModifiers"]
+    });
+    return products;
   }
 
   private isProductExists(product: Product): void {

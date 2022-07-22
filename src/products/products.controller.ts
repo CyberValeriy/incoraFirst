@@ -7,19 +7,25 @@ import {
   Param,
   Body,
   UseGuards,
+  Get,
+  Req,
 } from "@nestjs/common";
 import { ProductsService } from "./products.service";
+import {UsersService} from "../users/users.service";
 
 import { CreateProductDto,AddModifierDto,UpdateProductDto} from "./dtos";
-import { ApiBody, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
 
 import { AuthGuard } from "../guards/auth.guard";
+import { IAuthReq } from "../interfaces/users.interfaces";
 
+@ApiBearerAuth()
 @UseGuards(AuthGuard)
 @ApiTags("Products")
 @Controller("products")
 export class ProductsController {
-  constructor(private productService: ProductsService) {}
+  constructor(private productService: ProductsService,
+    private usersService:UsersService ) {}
 
   @Post("/create")
   @ApiBody({ type: CreateProductDto })
@@ -28,10 +34,16 @@ export class ProductsController {
     await this.productService.create(
       body.title,
       body.description,
-      // body.productModifiers,
       body.price
     );
     return { success: true };
+  }
+  
+  @Post("/addModifier")
+  @ApiBody({ type: AddModifierDto })
+  async addAlergen(@Body() body:AddModifierDto){
+    await this.productService.addModifier(body.productId,body.modifierId);
+    return {success:true}
   }
 
   @Delete("/:id")
@@ -49,10 +61,15 @@ export class ProductsController {
     return { success: true };
   }
 
-  @Post("/addModifier")
-  @ApiBody({ type: AddModifierDto })
-  async addAlergen(@Body() body:AddModifierDto){
-    await this.productService.addModifier(body.productId,body.modifierId);
-    return {success:true}
+
+
+  @Get('/')
+  async getProducts(@Req() req:IAuthReq){
+  const {userEmail} = req;
+  const alergensIds = await this.usersService.getAlergens(userEmail,true);
+  const products = await this.productService.getProducts(alergensIds as number[]);
+  return {success:true,data:products}
   }
+
+
 }

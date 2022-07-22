@@ -6,6 +6,6 @@ import { ICheckoutProducts } from "../../interfaces/users.interfaces"; //fix pat
 
 export class CheckoutDto {
   @IsArray()
-  @ApiProperty({ type: Array, required: true })
+  @ApiProperty({ type:Array,required:true})
   products: ICheckoutProducts[];
 }

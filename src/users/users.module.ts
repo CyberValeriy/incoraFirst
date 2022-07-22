@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Module } from "@nestjs/common";
+import { forwardRef, Module } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { UsersController } from "./users.controller";
 
@@ -13,6 +13,7 @@ import { Users } from "./users.entity";
 @Module({
   controllers: [UsersController],
   providers: [UsersService],
-  imports: [TypeOrmModule.forFeature([Users]), OrdersModule,ModifiersModule],
+  imports: [TypeOrmModule.forFeature([Users]), forwardRef(()=> OrdersModule),ModifiersModule],
+  exports:[UsersService]
 })
 export class UsersModule {}

@@ -4,8 +4,8 @@ import {
   BadRequestException,
   UnauthorizedException,
 } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { In, Not, Repository } from "typeorm";
+import { InjectRepository} from "@nestjs/typeorm";
+import { In, Not, Repository} from "typeorm";
 
 import { ICheckoutProducts } from "../interfaces/users.interfaces";
 
@@ -18,6 +18,7 @@ import {ModifiersService} from "../modifiers/modifiers.service";
 
 import { generateToken } from "../utils/jwt.util";
 import bcrypt from "bcrypt";
+import { Modifier } from "src/modifiers/modifiers.entity";
 
 
 /*How to not block errors with try? */
@@ -78,7 +79,7 @@ export class UsersService {
   }
 
   /*
-  Remake for using user with relations not userId
+  Remake ffindOne or using user with relations not userId
   */
   async addAlergen(userEmail:string,alergenId:number):Promise<Users>{
     const user = await this.usersRepo.findOne({where:{email:userEmail},relations:["alergens"]});
@@ -86,18 +87,15 @@ export class UsersService {
     user.alergens.push(alergen);
     return this.usersRepo.save(user);
   }
-  // async testFunc() {
-  //   const users = await this.usersRepo.findOne({
-  //     where: { id: 1 },
-  //     relations: ["orders"],
-  //   });
-  //   const order = users.orders[0];
-  //   console.log(order);
-  //   //just get array of user alergen ids and exlude?
-  //   const test = await this.usersRepo.findOne({
-  //     where: { id: 1, orders: { id: Not(1) } },
-  //     relations: ["orders"],
-  //   });
-  //   console.log(test);
-  // }
+
+  async deleteAlergen(userEmail:string,alergenId:number):Promise<Users>{
+  const user = await this.usersRepo.findOne({where:{email:userEmail}});
+  user.alergens.filter(({id}) => id != alergenId); //Like in Doc, but is it fast?
+  return this.usersRepo.save(user);
+  }
+
+  async getAlergens(userEmail:string,idsOnly:boolean):Promise<number[]| Modifier[]>{
+    const {alergens} = await this.usersRepo.findOne({where:{email:userEmail},relations:["alergens"],loadRelationIds:idsOnly});
+    return alergens;
+  }
 }

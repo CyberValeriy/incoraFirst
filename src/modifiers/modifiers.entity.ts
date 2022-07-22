@@ -3,12 +3,9 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  ManyToMany,
-  JoinTable,
+  AfterInsert,
 } from "typeorm";
 
-import { Product } from "../products/product.entity";
-import { Users } from "../users/users.entity";
 
 @Entity()
 export class Modifier {
@@ -18,11 +15,10 @@ export class Modifier {
   @Column()
   title: string;
 
-  @ManyToMany(() => Product)
-  @JoinTable()
-  products: Product[];
 
-  @ManyToMany(() => Users)
-  @JoinTable()
-  users: Users[];
+
+  @AfterInsert()
+  logInsert(){
+    console.log("Modifier insert triggered with id: " + this.id);
+  }
 }
