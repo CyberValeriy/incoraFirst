@@ -68,7 +68,7 @@ export class ProductsService {
     }
   }
 
-  isProductExists(product: Product) {
+  private isProductExists(product: Product): void {
     if (!product) {
       throw new BadRequestException("Product not found!");
     }

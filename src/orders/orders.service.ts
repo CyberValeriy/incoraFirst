@@ -30,13 +30,13 @@ export class OrdersService {
     }
   }
 
-  async createItems(order: Orders, products): Promise<void> {
-    //bullshit?
-    const productIds = [];
+  async createItems(
+    order: Orders,
+    products: { id: number; quantity: number }[] //or create interface?
+  ): Promise<void> {
 
-    for (const el of products) {
-      productIds.push(el.id);
-    }
+    const productIds = products.map(({id})=>id);
+
     const productInstances: Product[] = await this.productService.findMany(
       productIds
     );

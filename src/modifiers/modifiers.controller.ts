@@ -9,7 +9,7 @@ import {
   Query,
   UseGuards,
 } from "@nestjs/common";
-import { CreateModifierDto } from "./dtos/create-modifier.dto";
+import {CreateModifierDto,FetchModifierDto} from "./dtos";
 import { ModifiersService } from "./modifiers.service";
 import {
   ApiBody,
@@ -51,11 +51,10 @@ export class ModifiersController {
   @ApiQuery({ name: "skip" })
   @ApiResponse({ description: "Get modifiers with pagination" })
   @Get("/")
-  async fetch(@Query("skip") skip: string, @Query("limit") limit: string) {
-    //how to add default like skip = 5 without using any?
+  async fetch(@Query()pagination:FetchModifierDto) {
     const modifiers = await this.modifierService.fetch(
-      parseInt(skip),
-      parseInt(limit)
+      parseInt(pagination.skip),
+      parseInt(pagination.limit)
     );
     return { success: true, data: { modifiers } };
   }

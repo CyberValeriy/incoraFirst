@@ -15,6 +15,7 @@ import { generateToken } from "../utils/jwt.util";
 
 import { ICheckoutProducts } from "../interfaces/users.interfaces";
 import bcrypt from "bcrypt";
+import { Orders } from "src/orders/order.entity";
 
 /*How to not block errors with try? */
 
@@ -25,7 +26,7 @@ export class UsersService {
     private ordersService: OrdersService
   ) {}
 
-  async create(email: string, password: string) {
+  async create(email: string, password: string): Promise<string> {
     const user = await this.usersRepo.findOne({ where: { email } });
     if (user) {
       throw new BadRequestException("Email already claimed!");
@@ -40,7 +41,7 @@ export class UsersService {
     return token;
   }
 
-  async signin(email: string, password: string) {
+  async signin(email: string, password: string): Promise<string> {
     const user = await this.usersRepo.findOne({ where: { email } });
     const passwordIsCorrect = await bcrypt.compare(password, user.password);
     if (!passwordIsCorrect) {
@@ -50,7 +51,7 @@ export class UsersService {
     return token;
   }
 
-  async checkout(user: Users, products: ICheckoutProducts[]) {
+  async checkout(user: Users, products: ICheckoutProducts[]): Promise<Orders> {
     try {
       const order = await this.ordersService.create(user);
       await this.ordersService.createItems(order, products);
@@ -60,13 +61,13 @@ export class UsersService {
     }
   }
 
-  async findOne(email: string) {
+  async findOne(email: string): Promise<Users> {
     const user = await this.usersRepo.findOne({ where: { email } });
     this.isUserExists(user);
     return user;
   }
 
-  isUserExists(user: Users) {
+  private isUserExists(user: Users): void {
     if (!user) {
       throw new BadRequestException("User not found!");
     }

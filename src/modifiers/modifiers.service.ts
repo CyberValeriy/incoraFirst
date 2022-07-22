@@ -11,7 +11,7 @@ export class ModifiersService {
     @InjectRepository(Modifier) private modifierRepo: Repository<Modifier>
   ) {}
 
-  create(title: string) {
+  create(title: string): Promise<Modifier> {
     try {
       const modifierInstance = this.modifierRepo.create({ title });
       return this.modifierRepo.save(modifierInstance);
@@ -20,7 +20,7 @@ export class ModifiersService {
     }
   }
 
-  async delete(id: number) {
+  async delete(id: number): Promise<Modifier> {
     const modifier = await this.modifierRepo.findOne({ where: { id } });
     this.isModifierExists(modifier);
 
@@ -31,7 +31,7 @@ export class ModifiersService {
     }
   }
 
-  fetch(skip: number, limit: number) {
+  fetch(skip: number, limit: number): Promise<Modifier[]> {
     try {
       return this.modifierRepo.find({ skip, take: limit });
     } catch ({ message }) {
@@ -39,7 +39,7 @@ export class ModifiersService {
     }
   }
 
-  isModifierExists(modifier: Modifier) {
+  private isModifierExists(modifier: Modifier): void {
     //create global func
     if (!modifier) {
       throw new BadRequestException("Modifier not found!");
