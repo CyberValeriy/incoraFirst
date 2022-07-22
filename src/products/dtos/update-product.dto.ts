@@ -15,6 +15,4 @@ export class UpdateProductDto {
   @ApiProperty({ type: String, required: false })
   description: string;
 
-  //   @IsArray()
-  //   productModifiers: Array<string>;
 }

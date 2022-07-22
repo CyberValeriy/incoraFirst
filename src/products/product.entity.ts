@@ -5,9 +5,12 @@ import {
   PrimaryGeneratedColumn,
   AfterInsert,
   OneToMany,
+  ManyToMany,
+  JoinTable
 } from "typeorm";
 
 import { OrderItem } from "../orders/orderItems.entity";
+import {Modifier} from "../modifiers/modifiers.entity";
 
 @Entity()
 export class Product {
@@ -23,9 +26,9 @@ export class Product {
   @Column()
   price: number;
 
-  // @ManyToMany(() => ProductModifier)
-  // @JoinTable()
-  // productModifiers: string[]; //Many To Many
+  @ManyToMany(() => Modifier)
+  @JoinTable()
+  productModifiers: Modifier[];
 
   @OneToMany(() => OrderItem, (orderItem) => orderItem.product)
   orderItems: OrderItem[];

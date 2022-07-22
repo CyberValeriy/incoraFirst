@@ -17,7 +17,4 @@ export class CreateProductDto {
   @ApiProperty({ type: Number, required: true })
   price: number;
 
-  // @IsArray()
-  // @ApiProperty({ type: Array, required: true })
-  // productModifiers: Array<string>;
 }

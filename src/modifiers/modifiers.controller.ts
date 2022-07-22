@@ -27,17 +27,17 @@ import { AuthGuard } from "../guards/auth.guard";
 export class ModifiersController {
   constructor(private modifierService: ModifiersService) {}
 
+  @Post("/create")
   @ApiBody({ type: CreateModifierDto })
   @ApiResponse({ description: "Create a modifier!" })
-  @Post("/create")
   async create(@Body() body: CreateModifierDto) {
     const modifier = await this.modifierService.create(body.title);
     return { success: true, data: { modifier } };
   }
 
+  @Delete("/:id")
   @ApiParam({ name: "id" })
   @ApiResponse({ description: "Delete a modifier!" })
-  @Delete("/:id")
   async delete(@Param("id") id: string) {
     await this.modifierService.delete(parseInt(id));
     return { success: true };
@@ -45,12 +45,12 @@ export class ModifiersController {
 
   /* 
   How to not duplicate decorators?
-  Can i create own decorator(wrapper for many decorators)
+  Can i create own decorator(wrapper for many decorators)?
    */
+  @Get("/")
   @ApiQuery({ name: "limit" })
   @ApiQuery({ name: "skip" })
   @ApiResponse({ description: "Get modifiers with pagination" })
-  @Get("/")
   async fetch(@Query()pagination:FetchModifierDto) {
     const modifiers = await this.modifierService.fetch(
       parseInt(pagination.skip),

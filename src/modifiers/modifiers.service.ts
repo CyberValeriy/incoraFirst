@@ -39,6 +39,12 @@ export class ModifiersService {
     }
   }
 
+  async findOne(id:number):Promise<Modifier>{
+    const modifier = await this.modifierRepo.findOne({where:{id}});
+    this.isModifierExists(modifier);
+    return modifier;
+  }
+
   private isModifierExists(modifier: Modifier): void {
     //create global func
     if (!modifier) {

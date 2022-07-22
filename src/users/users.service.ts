@@ -7,15 +7,18 @@ import {
 import { InjectRepository } from "@nestjs/typeorm";
 import { In, Not, Repository } from "typeorm";
 
+import { ICheckoutProducts } from "../interfaces/users.interfaces";
+
 import { Users } from "./users.entity";
+import { Orders } from "src/orders/order.entity";
 
 import { OrdersService } from "../orders/orders.service";
+import {ModifiersService} from "../modifiers/modifiers.service";
+
 
 import { generateToken } from "../utils/jwt.util";
-
-import { ICheckoutProducts } from "../interfaces/users.interfaces";
 import bcrypt from "bcrypt";
-import { Orders } from "src/orders/order.entity";
+
 
 /*How to not block errors with try? */
 
@@ -23,7 +26,8 @@ import { Orders } from "src/orders/order.entity";
 export class UsersService {
   constructor(
     @InjectRepository(Users) private usersRepo: Repository<Users>,
-    private ordersService: OrdersService
+    private ordersService: OrdersService,
+    private modifiersService:ModifiersService
   ) {}
 
   async create(email: string, password: string): Promise<string> {
@@ -71,6 +75,16 @@ export class UsersService {
     if (!user) {
       throw new BadRequestException("User not found!");
     }
+  }
+
+  /*
+  Remake for using user with relations not userId
+  */
+  async addAlergen(userEmail:string,alergenId:number):Promise<Users>{
+    const user = await this.usersRepo.findOne({where:{email:userEmail},relations:["alergens"]});
+    const alergen = await this.modifiersService.findOne(alergenId);
+    user.alergens.push(alergen);
+    return this.usersRepo.save(user);
   }
   // async testFunc() {
   //   const users = await this.usersRepo.findOne({

@@ -10,9 +10,7 @@ import {
 } from "@nestjs/common";
 import { ProductsService } from "./products.service";
 
-//instead of import duplicate add index.ts in dtos with exports;
-import { CreateProductDto } from "./dtos/create-product.dto";
-import { UpdateProductDto } from "./dtos/update-product.dto";
+import { CreateProductDto,AddModifierDto,UpdateProductDto} from "./dtos";
 import { ApiBody, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
 
 import { AuthGuard } from "../guards/auth.guard";
@@ -49,5 +47,12 @@ export class ProductsController {
   async updateProduct(@Param("id") id: string, @Body() body: UpdateProductDto) {
     await this.productService.update(parseInt(id), body);
     return { success: true };
+  }
+
+  @Post("/addModifier")
+  @ApiBody({ type: AddModifierDto })
+  async addAlergen(@Body() body:AddModifierDto){
+    await this.productService.addModifier(body.productId,body.modifierId);
+    return {success:true}
   }
 }

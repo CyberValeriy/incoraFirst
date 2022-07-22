@@ -5,9 +5,12 @@ import {
   PrimaryGeneratedColumn,
   AfterInsert,
   OneToMany,
+  ManyToMany,
+  JoinTable,
 } from "typeorm";
 
 import { Orders } from "../orders/order.entity";
+import { Modifier } from "../modifiers/modifiers.entity";
 
 @Entity()
 export class Users {
@@ -20,6 +23,10 @@ export class Users {
 
   @OneToMany(() => Orders, (order) => order.user)
   orders: Orders[];
+
+  @ManyToMany(()=>Modifier)
+  @JoinTable()
+  alergens:Modifier[]
 
   //logs
   @AfterInsert()

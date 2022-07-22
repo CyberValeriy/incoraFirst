@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Post, Body, Get, UseGuards, Req } from "@nestjs/common";
+import { Controller, Post, Body, UseGuards, Req } from "@nestjs/common";
 import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
 
-import { CheckoutDto, CreateUserDto, SignInUserDto } from "./dtos";
+import { CheckoutDto, CreateUserDto, SignInUserDto,AddAlergenDto} from "./dtos";
 import { UsersService } from "./users.service";
 
 import { AuthGuard } from "../guards/auth.guard";
@@ -44,11 +44,13 @@ export class UsersController {
     return { success: true, payload: { orderId: order.id } };
   }
 
-  // @UseGuards(AuthGuard)
-  // @Get("/test")
-  // async testFunc() {
-  //   this.userService.testFunc();
-  // }
+  @UseGuards(AuthGuard)
+  @Post("/addAlergen")
+  @ApiBody({ type: AddAlergenDto })
+  async addAlergen(@Req() req:IAuthReq,@Body() body:AddAlergenDto){
+    await this.userService.addAlergen(req.userEmail,body.alergenId);
+    return {success:true}
+  }
 }
 
 /* 

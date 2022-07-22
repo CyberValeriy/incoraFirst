@@ -10,5 +10,6 @@ import { Modifier } from "./modifiers.entity";
   controllers: [ModifiersController],
   providers: [ModifiersService],
   imports: [TypeOrmModule.forFeature([Modifier])],
+  exports:[ModifiersService]
 })
 export class ModifiersModule {}

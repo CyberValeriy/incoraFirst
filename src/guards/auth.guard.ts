@@ -8,7 +8,7 @@ import {
 
 import { Observable } from "rxjs";
 import { IAuthReq } from "../interfaces/users.interfaces";
-import { authHeaderCheck } from "../utils/auth.util";
+import { authHeaderInfo } from "../utils/auth.util";
 
 /*
 How to make service to exec in guard
@@ -27,7 +27,7 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException("Authorization header missing!");
     }
 
-    const payload = authHeaderCheck(authorization);
+    const payload = authHeaderInfo(authorization);
     req.userEmail = payload.email;
     return true;
   }
