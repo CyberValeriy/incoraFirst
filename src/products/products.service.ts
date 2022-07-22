@@ -28,7 +28,7 @@ export class ProductsService {
     }
   }
 
-  async remove(id: number) {
+  async remove(id: number):Promise<Product>{
     const product = await this.productRepo.findOne({ where: { id } });
     this.isProductExists(product);
     try {
@@ -79,11 +79,18 @@ export class ProductsService {
     return this.productRepo.save(product);
   }
 
-  async getProducts(alergens:number[]){
-    const products = await this.productRepo.find({
-      where:{productModifiers:{id:Not(In(alergens))}}, //how to fix products that don't have relations?
-      relations:["productModifiers"]
-    });
+  async getProducts(alergens:number[]):Promise<Product[]>{
+/*
+Fast way to fix is create default modifier - bad(maybe)
+*/
+
+
+    // const products = await this.productRepo.find({
+    //   where:{productModifiers:{id:Not(In(alergens))}}, //how to fix products that don't have relations?
+    //   relations:["productModifiers"],
+    // });
+
+    const products = await this.productRepo.createQueryBuilder("product").leftJoinAndSelect("product.productModifiers","pm",).where("pm.id NOT IN (:...ids) OR COALESCE(pm.id,0) = 0",{ids:alergens}).getMany();//i am a god
     return products;
   }
 
