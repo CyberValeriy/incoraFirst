@@ -40,8 +40,8 @@ export class UsersController {
   @ApiBody({type:CheckoutDto})
   @ApiResponse({ status: 201, description: "Create order with products" })
   async checkout(@Req() req: IAuthReq, @Body() payload: CheckoutDto) {
-    const userEmail = req.userEmail;
-    const user = await this.userService.findOne(userEmail);
+    const {email} = req.user;
+    const user = await this.userService.findOne(email);
     const order = await this.userService.checkout(user, payload.products);
     return { success: true, payload: { orderId: order.id } };
   }
@@ -51,7 +51,8 @@ export class UsersController {
   @Post("/addAlergen")
   @ApiBody({ type: AddAlergenDto })
   async addAlergen(@Req() req:IAuthReq,@Body() body:AddAlergenDto){
-    await this.userService.addAlergen(req.userEmail,body.alergenId);
+    const {email} = req.user;
+    await this.userService.addAlergen(email,body.alergenId);
     return {success:true}
   }
 
@@ -59,8 +60,8 @@ export class UsersController {
   @UseGuards(AuthGuard)
   @Delete("/alergen/:id")
   async deleteAlergen(@Req() req:IAuthReq, @Param('id') id:string){
-    const {userEmail} = req;
-    await this.userService.deleteAlergen(userEmail,parseInt(id));
+    const {email} = req.user;
+    await this.userService.deleteAlergen(email,parseInt(id));
   }
 
 
@@ -68,12 +69,12 @@ export class UsersController {
   @UseGuards(AuthGuard)
   @Get("/getAlergens")
   @ApiQuery({name:"idsOnly"})
-  async test(@Req() req: IAuthReq,@Query() query:GetAlergenDto){
+  async getAlergens(@Req() req: IAuthReq,@Query() query:GetAlergenDto){
 
-   const {userEmail} = req;
+   const {email} = req.user;
    const idsOnlyParsed = query?.idsOnly == "true" ? true : false;
 
-   const alergens = await this.userService.getAlergens(userEmail,idsOnlyParsed);
+   const alergens = await this.userService.getAlergens(email,idsOnlyParsed);
    return {success:true,data:{alergens}}
   }
 }

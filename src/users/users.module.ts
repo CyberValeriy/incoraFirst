@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { forwardRef, Module } from "@nestjs/common";
+import { forwardRef, Global, Module } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { UsersController } from "./users.controller";
 
@@ -10,6 +10,11 @@ import {ModifiersModule} from "../modifiers/modifiers.module";
 
 import { Users } from "./users.entity";
 
+/*
+Is it right?
+Or create other global module with imports from not-global modules?
+*/
+@Global()
 @Module({
   controllers: [UsersController],
   providers: [UsersService],

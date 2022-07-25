@@ -45,18 +45,12 @@ export class ModifiersController {
     return { success: true };
   }
 
-  /* 
-  How to not duplicate decorators?
-  Can i create own decorator(wrapper for many decorators)?
-   */
   @Get("/")
-  @ApiQuery({ name: "limit" })
-  @ApiQuery({ name: "skip" })
   @ApiResponse({ description: "Get modifiers with pagination" })
   async fetch(@Query() query:FetchModifierDto) {
     const modifiers = await this.modifierService.fetch(
-      parseInt(query.skip),
-      parseInt(query.limit)
+      query.skip,
+      query.limit
     );
     return { success: true, data: { modifiers } };
   }

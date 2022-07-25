@@ -65,9 +65,8 @@ export class ProductsController {
 
   @Get('/')
   async getProducts(@Req() req:IAuthReq){
-  const {userEmail} = req;
-  const alergensIds = await this.usersService.getAlergens(userEmail,true);
-  const products = await this.productService.getProducts(alergensIds as number[]);
+  const {id} = req.user;
+  const products = await this.productService.getProducts(id);
   return {success:true,data:products}
   }
 

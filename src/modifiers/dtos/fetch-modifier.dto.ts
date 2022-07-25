@@ -1,15 +1,25 @@
 /* eslint-disable prettier/prettier */
-import { IsString, IsNotEmpty } from "class-validator";
+import { IsNumber } from "class-validator";
+import {Type} from "class-transformer";
 import { ApiProperty } from "@nestjs/swagger";
+import { Optional } from "@nestjs/common";
 
 export class FetchModifierDto {
-  @ApiProperty({ type: String })
-  @IsNotEmpty()
-  @IsString()
-  skip: string;
+  @ApiProperty({ type: Number })
+  @Optional()
+  @Type(()=> Number)
+  @IsNumber()
+  skip: number;
+  
+  @ApiProperty({ type: Number })
+  @Optional()
+  @Type(()=>Number)
+  @IsNumber()
+  limit:number;
 
-  @IsNotEmpty()
-  @IsString()
-  @ApiProperty({ type: String })
-  limit:string;
+  constructor(skip = 0,limit = 20){
+    this.skip = skip;
+    this.limit = limit;
+  }
+
 }

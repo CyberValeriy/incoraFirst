@@ -2,7 +2,7 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import {ModifiersService} from "../modifiers/modifiers.service";
 
-import { In,  Not, Repository} from "typeorm";
+import { In,  Repository} from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Product } from "./product.entity";
 
@@ -79,19 +79,36 @@ export class ProductsService {
     return this.productRepo.save(product);
   }
 
-  async getProducts(alergens:number[]):Promise<Product[]>{
-/*
-Fast way to fix is create default modifier - bad(maybe)
-*/
+  async getProducts(userId):Promise<Product[]>{
 
-
-    // const products = await this.productRepo.find({
-    //   where:{productModifiers:{id:Not(In(alergens))}}, //how to fix products that don't have relations?
-    //   relations:["productModifiers"],
-    // });
-
-    const products = await this.productRepo.createQueryBuilder("product").leftJoinAndSelect("product.productModifiers","pm",).where("pm.id NOT IN (:...ids) OR COALESCE(pm.id,0) = 0",{ids:alergens}).getMany();//i am a god
+    //first try
+    const products = await this.productRepo.query(`
+    WITH alergens AS (
+      SELECT
+        "modifierId"
+      FROM
+        users_alergens_modifier
+      WHERE
+        "usersId" = ${userId}
+    )
+    
+    
+    SELECT
+      product.id,
+      product.title,
+      ARRAY_AGG(row_to_json(modifier)) AS modifiers
+    FROM
+      product
+      LEFT JOIN product_product_modifiers_modifier as productmodifiers ON productmodifiers."productId" = product.id
+      LEFT JOIN modifier ON modifier.id = productmodifiers."modifierId"
+    WHERE
+      "modifierId" NOT IN (SELECT * FROM alergens) OR "modifierId" IS NULL
+    GROUP BY
+      product.id;
+    `)
     return products;
+
+
   }
 
   private isProductExists(product: Product): void {

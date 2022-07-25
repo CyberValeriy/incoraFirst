@@ -6,20 +6,19 @@ import {
   UnauthorizedException,
 } from "@nestjs/common";
 
-import { Observable } from "rxjs";
+import {UsersService} from "../users/users.service";
+
 import { IAuthReq } from "../interfaces/users.interfaces";
 import { authHeaderInfo } from "../utils/auth.util";
 
-/*
-How to make service to exec in guard
-Or create decorator for user extracting?
-*/
-
 @Injectable()
 export class AuthGuard implements CanActivate {
-  canActivate(
+
+  constructor(private usersService:UsersService ){}
+
+ async canActivate(
     context: ExecutionContext
-  ): boolean | Promise<boolean> | Observable<boolean> {
+  ) {
     const req: IAuthReq = context.switchToHttp().getRequest();
     const authorization = req.headers.authorization;
 
@@ -28,7 +27,7 @@ export class AuthGuard implements CanActivate {
     }
 
     const payload = authHeaderInfo(authorization);
-    req.userEmail = payload.email;
+    req.user = await this.usersService.findOne(payload.userEmail);
     return true;
   }
 }
