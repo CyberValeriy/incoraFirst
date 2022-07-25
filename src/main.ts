@@ -27,12 +27,21 @@ async function bootstrap() {
 
   const doc = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup("api-doc", app, doc);
+    
+ const server =  await app.listen(PORT, logLaunch);
 
-  await app.listen(PORT, logLaunch);
+ process.on("SIGINT",()=>{
+  server.close(()=>{
+    process.exit(0);
+  });
+});
+
+process.on("SIGTERM",()=>{
+  server.close(()=>{
+    process.exit(0);
+  });
+});
+
 }
 bootstrap();
 
-
-/* 
-Do we need to listen signals and gracefuly shutdown?
-*/

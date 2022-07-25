@@ -1,11 +1,12 @@
 /* eslint-disable prettier/prettier */
 
-import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { PostgresConnectionOptions } from "typeorm/driver/postgres/PostgresConnectionOptions";
 import { DB } from "../config/application.config";
 
 import { postgresT } from "../types/databaseTypes";
 
-const CONFIG: TypeOrmModuleOptions = {
+const CONFIG:PostgresConnectionOptions = {
   type: DB.type as postgresT, //🤔
   database: DB.name,
   host: DB.host,
@@ -13,7 +14,11 @@ const CONFIG: TypeOrmModuleOptions = {
   username: DB.username,
   password: DB.password,
   entities: ["dist/**/*.entity.js"],
-  synchronize: true,
+  synchronize: false,
+  migrations:["dist/src/db/migrations/*.ts"],
+  // cli:{
+  //   migrationsDir: "dist/src/db/migrations"
+  // }
 };
 
 export default TypeOrmModule.forRoot(CONFIG);
