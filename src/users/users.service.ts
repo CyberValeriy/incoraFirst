@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from "@nestjs/common";
 import { InjectRepository} from "@nestjs/typeorm";
-import { In, Not, Repository} from "typeorm";
+import { Repository} from "typeorm";
 
 import { ICheckoutProducts } from "../interfaces/users.interfaces";
 
@@ -21,7 +21,6 @@ import bcrypt from "bcrypt";
 import { Modifier } from "src/modifiers/modifiers.entity";
 
 
-/*How to not block errors with try? */
 
 @Injectable()
 export class UsersService {
@@ -41,7 +40,7 @@ export class UsersService {
       email,
       password: hashedPassword,
     });
-    const token = generateToken({ email });
+    const token = generateToken({ email,id:user.id});
     await this.usersRepo.save(userInstance);
     return token;
   }
@@ -52,7 +51,7 @@ export class UsersService {
     if (!passwordIsCorrect) {
       throw new UnauthorizedException("Invalid password!");
     }
-    const token = generateToken({ email });
+    const token = generateToken({ email,id:user.id});
     return token;
   }
 
@@ -90,12 +89,12 @@ export class UsersService {
 
   async deleteAlergen(userEmail:string,alergenId:number):Promise<Users>{
   const user = await this.usersRepo.findOne({where:{email:userEmail}});
-  user.alergens.filter(({id}) => id != alergenId); //Like in Doc, but is it fast?
+  user.alergens.filter(({id}) => id !== alergenId);
   return this.usersRepo.save(user);
   }
 
-  async getAlergens(userEmail:string,idsOnly:boolean):Promise<number[]| Modifier[]>{
-    const {alergens} = await this.usersRepo.findOne({where:{email:userEmail},relations:["alergens"],loadRelationIds:idsOnly});
+  async getAlergens(userEmail:string):Promise<Modifier[]>{
+    const {alergens} = await this.usersRepo.findOne({where:{email:userEmail},relations:["alergens"]});
     return alergens;
   }
 }

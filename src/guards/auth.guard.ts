@@ -6,15 +6,12 @@ import {
   UnauthorizedException,
 } from "@nestjs/common";
 
-import {UsersService} from "../users/users.service";
-
 import { IAuthReq } from "../interfaces/users.interfaces";
 import { authHeaderInfo } from "../utils/auth.util";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
 
-  constructor(private usersService:UsersService ){}
 
  async canActivate(
     context: ExecutionContext
@@ -26,8 +23,7 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException("Authorization header missing!");
     }
 
-    const payload = authHeaderInfo(authorization);
-    req.user = await this.usersService.findOne(payload.userEmail);
+    req.user = authHeaderInfo(authorization);
     return true;
   }
 }

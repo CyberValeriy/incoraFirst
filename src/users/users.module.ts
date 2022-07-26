@@ -10,11 +10,6 @@ import {ModifiersModule} from "../modifiers/modifiers.module";
 
 import { Users } from "./users.entity";
 
-/*
-Is it right?
-Or create other global module with imports from not-global modules?
-*/
-@Global()
 @Module({
   controllers: [UsersController],
   providers: [UsersService],

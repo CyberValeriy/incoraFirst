@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 
 import { Request } from "express";
-import {Users} from "../users/users.entity";
+import { JwtPayload } from "jsonwebtoken";
 
 export interface ICheckoutProducts {
   id: number;
@@ -9,5 +9,11 @@ export interface ICheckoutProducts {
 }
 
 export interface IAuthReq extends Request {
-  user:Users
+  user: IJwtPayload;
+}
+
+export interface IJwtPayload extends JwtPayload {
+  //how to name it
+  email: string;
+  id: number;
 }
