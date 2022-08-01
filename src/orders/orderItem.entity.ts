@@ -8,7 +8,7 @@ import {
 } from "typeorm";
 
 import { Product } from "../products/product.entity";
-import { Orders } from "../orders/order.entity";
+import { Orders } from "./order.entity";
 
 @Entity()
 export class OrderItem {
@@ -30,7 +30,6 @@ export class OrderItem {
   @ManyToOne(() => Product)
   product: Product;
 
-  //logs
   @AfterInsert()
   logInsert() {
     console.log("OrderItem insert triggered with id: " + this.id);

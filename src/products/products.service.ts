@@ -28,7 +28,7 @@ export class ProductsService {
 
   async remove(id: number): Promise<Product> {
     const product = await this.productRepo.findOne({ where: { id } });
-    this.isProductExists(product);
+    this.validateProductExistence(product);
     try {
       return this.productRepo.remove(product);
     } catch ({ message }) {
@@ -38,7 +38,7 @@ export class ProductsService {
 
   async update(id: number, attrs: Partial<Product>): Promise<Product> {
     const product = await this.productRepo.findOne({ where: { id } });
-    this.isProductExists(product);
+    this.validateProductExistence(product);
     try {
       Object.assign(product, attrs);
       return this.productRepo.save(product);
@@ -49,7 +49,7 @@ export class ProductsService {
 
   async findOne(id: number): Promise<Product> {
     const product = await this.productRepo.findOne({ where: { id } });
-    this.isProductExists(product);
+    this.validateProductExistence(product);
     try {
       return product;
     } catch ({ message }) {
@@ -108,7 +108,7 @@ export class ProductsService {
     return products;
   }
 
-  private isProductExists(product: Product): void {
+  private validateProductExistence(product: Product): void {
     if (!product) {
       throw new BadRequestException("Product not found!");
     }

@@ -6,11 +6,11 @@ import {
   AfterInsert,
   OneToMany,
   ManyToMany,
-  JoinTable
+  JoinTable,
 } from "typeorm";
 
-import { OrderItem } from "../orders/orderItems.entity";
-import {Modifier} from "../modifiers/modifiers.entity";
+import { OrderItem } from "../orders/orderItem.entity";
+import { Modifier } from "../modifiers/modifiers.entity";
 
 @Entity()
 export class Product {
@@ -33,7 +33,6 @@ export class Product {
   @OneToMany(() => OrderItem, (orderItem) => orderItem.product)
   orderItems: OrderItem[];
 
-  //logs
   @AfterInsert()
   logInsert() {
     console.log("Product insert triggered with id: " + this.id);

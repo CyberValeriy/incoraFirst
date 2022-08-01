@@ -22,7 +22,7 @@ export class ModifiersService {
 
   async delete(id: number): Promise<Modifier> {
     const modifier = await this.modifierRepo.findOne({ where: { id } });
-    this.isModifierExists(modifier);
+    this.validateMOdifierExistence(modifier);
 
     try {
       return this.modifierRepo.remove(modifier);
@@ -39,14 +39,13 @@ export class ModifiersService {
     }
   }
 
-  async findOne(id:number):Promise<Modifier>{
-    const modifier = await this.modifierRepo.findOne({where:{id}});
-    this.isModifierExists(modifier);
+  async findOne(id: number): Promise<Modifier> {
+    const modifier = await this.modifierRepo.findOne({ where: { id } });
+    this.validateMOdifierExistence(modifier);
     return modifier;
   }
 
-  private isModifierExists(modifier: Modifier): void {
-    //create global func
+  private validateMOdifierExistence(modifier: Modifier): void {
     if (!modifier) {
       throw new BadRequestException("Modifier not found!");
     }

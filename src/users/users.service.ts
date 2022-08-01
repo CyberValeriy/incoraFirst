@@ -3,9 +3,10 @@ import {
   Injectable,
   BadRequestException,
   UnauthorizedException,
+  Inject,
 } from "@nestjs/common";
-import { InjectRepository} from "@nestjs/typeorm";
-import { Repository} from "typeorm";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 
 import { ICheckoutProducts } from "../interfaces/users.interfaces";
 
@@ -13,21 +14,20 @@ import { Users } from "./users.entity";
 import { Orders } from "src/orders/order.entity";
 
 import { OrdersService } from "../orders/orders.service";
-import {ModifiersService} from "../modifiers/modifiers.service";
-
+import { ModifiersService } from "../modifiers/modifiers.service";
 
 import { generateToken } from "../utils/jwt.util";
 import bcrypt from "bcrypt";
 import { Modifier } from "src/modifiers/modifiers.entity";
-
-
+import { ClientKafka } from "@nestjs/microservices";
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(Users) private usersRepo: Repository<Users>,
-    private ordersService: OrdersService,
-    private modifiersService:ModifiersService
+    @InjectRepository(Users) private readonly usersRepo: Repository<Users>,
+    private readonly ordersService: OrdersService,
+    private readonly modifiersService: ModifiersService,
+    @Inject("KafkaClient") private readonly clientKafka: ClientKafka
   ) {}
 
   async create(email: string, password: string): Promise<string> {
@@ -40,7 +40,7 @@ export class UsersService {
       email,
       password: hashedPassword,
     });
-    const token = generateToken({ email,id:user.id});
+    const token = generateToken({ email, id: user.id });
     await this.usersRepo.save(userInstance);
     return token;
   }
@@ -51,7 +51,7 @@ export class UsersService {
     if (!passwordIsCorrect) {
       throw new UnauthorizedException("Invalid password!");
     }
-    const token = generateToken({ email,id:user.id});
+    const token = generateToken({ email, id: user.id });
     return token;
   }
 
@@ -67,34 +67,41 @@ export class UsersService {
 
   async findOne(email: string): Promise<Users> {
     const user = await this.usersRepo.findOne({ where: { email } });
-    this.isUserExists(user);
+    this.validateUserExistence(user);
     return user;
   }
 
-  private isUserExists(user: Users): void {
-    if (!user) {
-      throw new BadRequestException("User not found!");
-    }
-  }
-
-  /*
-  Remake ffindOne or using user with relations not userId
-  */
-  async addAlergen(userEmail:string,alergenId:number):Promise<Users>{
-    const user = await this.usersRepo.findOne({where:{email:userEmail},relations:["alergens"]});
+  async addAlergen(userEmail: string, alergenId: number): Promise<Users> {
+    const user = await this.usersRepo.findOne({
+      where: { email: userEmail },
+      relations: ["alergens"],
+    });
     const alergen = await this.modifiersService.findOne(alergenId);
     user.alergens.push(alergen);
     return this.usersRepo.save(user);
   }
 
-  async deleteAlergen(userEmail:string,alergenId:number):Promise<Users>{
-  const user = await this.usersRepo.findOne({where:{email:userEmail}});
-  user.alergens.filter(({id}) => id !== alergenId);
-  return this.usersRepo.save(user);
+  async deleteAlergen(userEmail: string, alergenId: number): Promise<Users> {
+    const user = await this.usersRepo.findOne({ where: { email: userEmail } });
+    user.alergens.filter(({ id }) => id !== alergenId);
+    return this.usersRepo.save(user);
   }
 
-  async getAlergens(userEmail:string):Promise<Modifier[]>{
-    const {alergens} = await this.usersRepo.findOne({where:{email:userEmail},relations:["alergens"]});
+  async getAlergens(userEmail: string): Promise<Modifier[]> {
+    const { alergens } = await this.usersRepo.findOne({
+      where: { email: userEmail },
+      relations: ["alergens"],
+    });
     return alergens;
+  }
+
+  async sendEmail(data: any) {
+    return this.clientKafka.emit("send_email", JSON.stringify(data));
+  }
+
+  private validateUserExistence(user: Users): void {
+    if (!user) {
+      throw new BadRequestException("User not found!");
+    }
   }
 }

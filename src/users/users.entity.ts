@@ -16,19 +16,20 @@ import { Modifier } from "../modifiers/modifiers.entity";
 export class Users {
   @PrimaryGeneratedColumn()
   id: number;
+
   @Column({ unique: true })
   email: string;
+
   @Column()
   password: string;
 
   @OneToMany(() => Orders, (order) => order.user)
   orders: Orders[];
 
-  @ManyToMany(()=>Modifier)
+  @ManyToMany(() => Modifier)
   @JoinTable()
-  alergens:Modifier[]
+  alergens: Modifier[];
 
-  //logs
   @AfterInsert()
   logInsert() {
     console.log("User insert triggered with id: " + this.id);

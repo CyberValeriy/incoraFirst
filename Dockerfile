@@ -1,9 +1,11 @@
 FROM node:16.15.1
 
-WORKDIR /app
+WORKDIR /usr/src/app
 
 COPY . .
 
 RUN npm install
 
-CMD ["npm run","start:dev"]
+EXPOSE 9090
+
+CMD ["npm","run","start:dev"]

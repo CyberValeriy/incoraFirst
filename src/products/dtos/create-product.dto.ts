@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { IsString, MinLength, IsArray, IsNumber } from "class-validator";
+import { IsString, MinLength, IsNumber } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
 export class CreateProductDto {
@@ -16,5 +16,4 @@ export class CreateProductDto {
   @IsNumber()
   @ApiProperty({ type: Number, required: true })
   price: number;
-
 }

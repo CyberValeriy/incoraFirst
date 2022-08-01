@@ -8,6 +8,7 @@ import {
   Get,
   Delete,
   Param,
+  Inject,
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
 
@@ -25,7 +26,7 @@ import { IAuthReq } from "../interfaces/users.interfaces";
 @ApiTags("Users")
 @Controller("users")
 export class UsersController {
-  constructor(private userService: UsersService) {}
+  constructor(private readonly userService: UsersService) {}
 
   @Post("/signup")
   @ApiResponse({
@@ -56,6 +57,10 @@ export class UsersController {
     const { email } = req.user;
     const user = await this.userService.findOne(email);
     const order = await this.userService.checkout(user, payload.products);
+    await this.userService.sendEmail({
+      orderId: order.id,
+      email,
+    });
     return { success: true, payload: { orderId: order.id } };
   }
 
@@ -84,6 +89,15 @@ export class UsersController {
 
     const alergens = await this.userService.getAlergens(email);
     return { success: true, data: { alergens } };
+  }
+
+  @Get("/testEmail")
+  async test() {
+    await this.userService.sendEmail({
+      orderId: 1,
+      email: "validoks@gmail.com",
+    });
+    return 0;
   }
 }
 

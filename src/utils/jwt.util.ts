@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
 import { JWT as JWTConf } from "../config/application.config";
-import jwt from "jsonwebtoken";
 import { IJwtPayload } from "../interfaces/users.interfaces";
+import jwt from "jsonwebtoken";
+
 import { UnauthorizedException } from "@nestjs/common";
 
 export const generateToken = (tokenPayload: IJwtPayload): string => {

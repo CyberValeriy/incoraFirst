@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { IsString, MinLength, IsArray, IsOptional } from "class-validator";
+import { IsString, MinLength, IsOptional } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
 export class UpdateProductDto {
@@ -14,5 +14,4 @@ export class UpdateProductDto {
   @MinLength(20)
   @ApiProperty({ type: String, required: false })
   description: string;
-
 }

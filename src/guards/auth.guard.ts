@@ -11,11 +11,7 @@ import { authHeaderInfo } from "../utils/auth.util";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-
-
- async canActivate(
-    context: ExecutionContext
-  ) {
+  async canActivate(context: ExecutionContext) {
     const req: IAuthReq = context.switchToHttp().getRequest();
     const authorization = req.headers.authorization;
 

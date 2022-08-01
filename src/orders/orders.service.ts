@@ -2,7 +2,7 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 
 import { Product } from "../products/product.entity";
-import { OrderItem } from "./orderItems.entity";
+import { OrderItem } from "./orderItem.entity";
 import { Users } from "../users/users.entity";
 import { Orders } from "./order.entity";
 
@@ -32,10 +32,9 @@ export class OrdersService {
 
   async createItems(
     order: Orders,
-    products: { id: number; quantity: number }[] //or create interface?
+    products: { id: number; quantity: number }[]
   ): Promise<void> {
-
-    const productIds = products.map(({id})=>id);
+    const productIds = products.map(({ id }) => id);
 
     const productInstances: Product[] = await this.productService.findMany(
       productIds
@@ -47,7 +46,6 @@ export class OrdersService {
     try {
       const orderItemsInstances = [];
       for (let i = 0; i < productInstances.length; i++) {
-        //or create array instead and after insert many?
         const orderItem = this.orderItemRepo.create({
           product: productInstances[i],
           order,

@@ -1,11 +1,5 @@
 /* eslint-disable prettier/prettier */
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  AfterInsert,
-} from "typeorm";
-
+import { Entity, Column, PrimaryGeneratedColumn, AfterInsert } from "typeorm";
 
 @Entity()
 export class Modifier {
@@ -15,10 +9,8 @@ export class Modifier {
   @Column()
   title: string;
 
-
-
   @AfterInsert()
-  logInsert(){
+  logInsert() {
     console.log("Modifier insert triggered with id: " + this.id);
   }
 }

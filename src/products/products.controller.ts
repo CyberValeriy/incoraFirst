@@ -11,10 +11,16 @@ import {
   Req,
 } from "@nestjs/common";
 import { ProductsService } from "./products.service";
-import {UsersService} from "../users/users.service";
+import { UsersService } from "../users/users.service";
 
-import { CreateProductDto,AddModifierDto,UpdateProductDto} from "./dtos";
-import { ApiBearerAuth, ApiBody, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { CreateProductDto, AddModifierDto, UpdateProductDto } from "./dtos";
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from "@nestjs/swagger";
 
 import { AuthGuard } from "../guards/auth.guard";
 import { IAuthReq } from "../interfaces/users.interfaces";
@@ -24,26 +30,24 @@ import { IAuthReq } from "../interfaces/users.interfaces";
 @ApiTags("Products")
 @Controller("products")
 export class ProductsController {
-  constructor(private productService: ProductsService,
-    private usersService:UsersService ) {}
+  constructor(
+    private productService: ProductsService,
+    private usersService: UsersService
+  ) {}
 
   @Post("/create")
   @ApiBody({ type: CreateProductDto })
   @ApiResponse({ description: "Create product!" })
   async createProduct(@Body() body: CreateProductDto) {
-    await this.productService.create(
-      body.title,
-      body.description,
-      body.price
-    );
+    await this.productService.create(body.title, body.description, body.price);
     return { success: true };
   }
-  
+
   @Post("/addModifier")
   @ApiBody({ type: AddModifierDto })
-  async addAlergen(@Body() body:AddModifierDto){
-    await this.productService.addModifier(body.productId,body.modifierId);
-    return {success:true}
+  async addAlergen(@Body() body: AddModifierDto) {
+    await this.productService.addModifier(body.productId, body.modifierId);
+    return { success: true };
   }
 
   @Delete("/:id")
@@ -61,14 +65,10 @@ export class ProductsController {
     return { success: true };
   }
 
-
-
-  @Get('/')
-  async getProducts(@Req() req:IAuthReq){
-  const {id} = req.user;
-  const products = await this.productService.getProducts(id);
-  return {success:true,data:products}
+  @Get("/")
+  async getProducts(@Req() req: IAuthReq) {
+    const { id } = req.user;
+    const products = await this.productService.getProducts(id);
+    return { success: true, data: products };
   }
-
-
 }

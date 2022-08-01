@@ -9,22 +9,21 @@ import {
   Query,
   UseGuards,
 } from "@nestjs/common";
-import {CreateModifierDto,FetchModifierDto} from "./dtos";
+import { CreateModifierDto, FetchModifierDto } from "./dtos";
 import { ModifiersService } from "./modifiers.service";
 import {
   ApiBearerAuth,
   ApiBody,
   ApiParam,
-  ApiQuery,
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
 
 import { AuthGuard } from "../guards/auth.guard";
 
-// @ApiBearerAuth()
+@ApiBearerAuth()
 @ApiTags("Modifiers")
-// @UseGuards(AuthGuard)
+@UseGuards(AuthGuard)
 @Controller("modifiers")
 export class ModifiersController {
   constructor(private modifierService: ModifiersService) {}
@@ -47,11 +46,8 @@ export class ModifiersController {
 
   @Get("/")
   @ApiResponse({ description: "Get modifiers with pagination" })
-  async fetch(@Query() query:FetchModifierDto) {
-    const modifiers = await this.modifierService.fetch(
-      query.skip,
-      query.limit
-    );
+  async fetch(@Query() query: FetchModifierDto) {
+    const modifiers = await this.modifierService.fetch(query.skip, query.limit);
     return { success: true, data: { modifiers } };
   }
 }
