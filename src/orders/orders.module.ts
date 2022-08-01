@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { forwardRef, Module } from "@nestjs/common";
 import { OrdersService } from "./orders.service";
 

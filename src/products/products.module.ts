@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { forwardRef, Module } from "@nestjs/common";
 import { ProductsService } from "./products.service";
 import { ProductsController } from "./products.controller";

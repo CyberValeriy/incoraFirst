@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { JWT as JWTConf } from "../config/application.config";
 import { IJwtPayload } from "../interfaces/users.interfaces";
 import jwt from "jsonwebtoken";

@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { ModifiersService } from "../modifiers/modifiers.service";
 

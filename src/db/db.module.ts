@@ -1,5 +1,3 @@
-/* eslint-disable prettier/prettier */
-
 import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
 import { DB } from "../config/application.config";
 

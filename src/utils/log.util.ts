@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { DB } from "../config/application.config";
 
 export const logLaunch = () => {

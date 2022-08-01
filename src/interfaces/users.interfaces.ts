@@ -1,5 +1,3 @@
-/* eslint-disable prettier/prettier */
-
 import { Request } from "express";
 import { JwtPayload } from "jsonwebtoken";
 

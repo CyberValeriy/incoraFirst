@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Module } from "@nestjs/common";
 import { ModifiersController } from "./modifiers.controller";
 import { ModifiersService } from "./modifiers.service";

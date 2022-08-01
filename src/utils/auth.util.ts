@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { BadRequestException, UnauthorizedException } from "@nestjs/common";
 import { decodeToken } from "./jwt.util";
 
