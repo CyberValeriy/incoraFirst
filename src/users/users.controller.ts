@@ -8,44 +8,24 @@ import {
   Delete,
   Param,
 } from "@nestjs/common";
-import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 
 import {
   CheckoutDto,
-  CreateUserDto,
-  SignInUserDto,
   AddAlergenDto,
+  CreateUserDto,
+  LogInUserDto,
 } from "./dtos";
 import { UsersService } from "./users.service";
 
 import { AuthGuard } from "../guards/auth.guard";
 import { IAuthReq } from "../interfaces/users.interfaces";
+import { MessagePattern } from "@nestjs/microservices";
 
 @ApiTags("Users")
 @Controller("users")
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
-
-  @Post("/signup")
-  @ApiResponse({
-    status: 201,
-    description: "User authorization",
-  })
-  @ApiBody({ type: CreateUserDto })
-  async signup(@Body() body: CreateUserDto) {
-    const token = await this.userService.create(body.email, body.password);
-    return { success: true, data: { token } };
-  }
-
-  @Post("/signin")
-  @ApiResponse({
-    status: 201,
-    description: "User authentication",
-  })
-  async signin(@Body() body: SignInUserDto) {
-    const token = await this.userService.signin(body.email, body.password);
-    return { success: true, data: { token } };
-  }
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
@@ -96,6 +76,23 @@ export class UsersController {
       email: "validoks@gmail.com",
     });
     return 0;
+  }
+
+  /*
+  Heartbeat func if slow calculations
+  */
+
+  @MessagePattern("signup_user")
+  async signup(data: CreateUserDto) {
+    // is dto gonna check kafka data?
+    const user = await this.userService.create(data.email, data.password);
+    return user;
+  }
+
+  @MessagePattern("login_user")
+  async login(data: LogInUserDto) {
+    const user = await this.userService.login(data.email, data.password);
+    return user;
   }
 }
 

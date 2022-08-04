@@ -5,7 +5,8 @@ const env = process.env;
 export const PORT = env.PORT;
 
 export const JWT = {
-  secret: env.JWT_SECRET,
+  access: env.JWT_REFRESH_SECRET,
+  refresh: env.JWT_ACCESS_SECRET,
 };
 
 export const DB = {

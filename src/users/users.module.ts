@@ -26,6 +26,9 @@ import { Users } from "./users.entity";
           producer: {
             allowAutoTopicCreation: false,
           },
+          consumer: {
+            groupId: "monolith-consumer",
+          },
         },
       },
     ]),

@@ -19,6 +19,9 @@ async function bootstrap() {
       producer: {
         allowAutoTopicCreation: false,
       },
+      consumer: {
+        groupId: "monolith",
+      },
     },
   });
   app.useGlobalPipes(
